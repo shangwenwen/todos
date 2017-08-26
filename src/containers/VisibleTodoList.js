@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { toggleTodo } from '../actions'
+import { toggleTodo, receiveTodos } from '../actions'
 import {getVisibleTodos} from '../reducers'
 import TodoList from '../components/TodoList'
 import { fetchTodos } from '../api'
@@ -18,8 +18,9 @@ class VisibleTodoList extends Component {
   }
 
   _fetchData() {
-    fetchTodos(this.props.filter).then((todos) => {
-      return console.log(this.props.filter, todos)
+    const { filter, receiveTodos } = this.props
+    fetchTodos(filter).then((todos) => {
+      receiveTodos(filter, todos)
     })
   }
 
@@ -36,5 +37,5 @@ export default connect(
     todos: getVisibleTodos(state, match.params.filter || 'all'),
     filter: match.params.filter || 'all'
   }),
-  { toggleTodo }
+  { toggleTodo, receiveTodos }
 )(VisibleTodoList)
